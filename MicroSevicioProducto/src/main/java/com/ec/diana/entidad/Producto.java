@@ -1,12 +1,18 @@
 package com.ec.diana.entidad;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import java.util.Date;
+
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "producto")
@@ -20,7 +26,10 @@ public class Producto {
 	private String prodCodigo;
 	@Column(name = "prod_nombre")
 	private String prodNombre;
-
+	@Column(name = "prod_fecha_creacion")
+	@Temporal(TemporalType.DATE)
+	private Date prodFechaCreacion;
+	
 	public Producto() {
 		super();
 	}
@@ -47,6 +56,14 @@ public class Producto {
 
 	public void setProdNombre(String prodNombre) {
 		this.prodNombre = prodNombre;
+	}
+
+	public Date getProdFechaCreacion() {
+		return prodFechaCreacion;
+	}
+
+	public void setProdFechaCreacion(Date prodFechaCreacion) {
+		this.prodFechaCreacion = prodFechaCreacion;
 	}
 
 	

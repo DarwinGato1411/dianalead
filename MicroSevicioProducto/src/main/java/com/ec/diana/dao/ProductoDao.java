@@ -3,7 +3,8 @@ package com.ec.diana.dao;
 public class ProductoDao {
 
 	private String prodCodigo;
-	private String prodNombre;
+	private String prodNombre;	
+	private Integer idProducto;
 	
 	
 	
@@ -26,6 +27,12 @@ public class ProductoDao {
 	}
 	public void setProdNombre(String prodNombre) {
 		this.prodNombre = prodNombre;
+	}
+	public Integer getIdProducto() {
+		return idProducto;
+	}
+	public void setIdProducto(Integer idProducto) {
+		this.idProducto = idProducto;
 	}
 	
 	

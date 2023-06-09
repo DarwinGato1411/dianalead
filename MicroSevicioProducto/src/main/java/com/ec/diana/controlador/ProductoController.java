@@ -2,6 +2,7 @@ package com.ec.diana.controlador;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -64,7 +65,11 @@ public class ProductoController {
 		httpHeaders.setCacheControl("no-cache, no-store, max-age=120, must-revalidate");
 
 		try {
+			Producto productow=productoRepository.buscarPorIdProducto(producto.getIdProducto());
+			
 			Producto producto2 = productoRepository.save(ProductoMapper.daoToEntidad(producto));
+//			Optional<Producto> so=productoRepository.findById(1);
+//			so.isPresent()
 			return new ResponseEntity<Producto>(producto2, httpHeaders, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO: handle exception

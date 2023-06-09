@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ec.diana.dao.KardexDao;
+import com.ec.diana.dao.ProductoDao;
 import com.ec.diana.entidad.Kardex;
 import com.ec.diana.mapper.KardexMapper;
 import com.ec.diana.servicios.KardexRepository;
@@ -53,8 +54,32 @@ public class KardexController {
 		}
 
 	}
+	
+	@RequestMapping(value = "/kardex-id-producto", method = RequestMethod.POST)
+	public ResponseEntity<?> kardexporIdProducto(@RequestBody ProductoDao valor) {
+		final HttpHeaders httpHeaders = new HttpHeaders();
+		Kardex respuesta = new Kardex();
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+		httpHeaders.setCacheControl("no-cache, no-store, max-age=120, must-revalidate");
+//		httpHeaders.setETag(HttpHeaders.ETAG);
+		try {
 
-	@RequestMapping(value = "/save-detalle-kardex", method = RequestMethod.POST)
+			/* CONSULTA EL CATALOGO DE PAISES POR LAS CONSTANTES DEFINIDAS */
+			respuesta =  repository.buscarPorIdProducto(valor.getIdProducto());
+//			cfgPais = GlobalValue.LISTACFGPAIS;
+			httpHeaders.add("STATUS", "1");
+			return new ResponseEntity<KardexDao>(KardexMapper.entidadToDao(respuesta), httpHeaders, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("ERROR catalogues " + e.getMessage());
+			httpHeaders.add("STATUS", "0");
+			return new ResponseEntity<String>(e.getMessage(), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	
+
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody KardexDao valor) {
 		final HttpHeaders httpHeaders = new HttpHeaders();
 
