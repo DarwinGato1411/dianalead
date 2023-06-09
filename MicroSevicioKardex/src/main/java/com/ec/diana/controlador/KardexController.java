@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ec.diana.comunicar.KardexServices;
+import com.ec.diana.dao.DetalleKardexDao;
 import com.ec.diana.dao.KardexDao;
 import com.ec.diana.dao.ProductoDao;
 import com.ec.diana.entidad.Kardex;
@@ -32,8 +34,9 @@ public class KardexController {
 
 	@Autowired
 	private KardexRepository repository;
-	
-	
+
+	@Autowired
+	KardexServices kardexServices;
 
 	@RequestMapping(value = "/kardex", method = RequestMethod.GET)
 	public ResponseEntity<?> productos() {
@@ -48,7 +51,8 @@ public class KardexController {
 			respuesta = (List<Kardex>) repository.findAll();
 //			cfgPais = GlobalValue.LISTACFGPAIS;
 			httpHeaders.add("STATUS", "1");
-			return new ResponseEntity<List<KardexDao>>(KardexMapper.listaEntidadToListaDao(respuesta), httpHeaders, HttpStatus.OK);
+			return new ResponseEntity<List<KardexDao>>(KardexMapper.listaEntidadToListaDao(respuesta), httpHeaders,
+					HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("ERROR catalogues " + e.getMessage());
@@ -57,10 +61,10 @@ public class KardexController {
 		}
 
 	}
-	
+
 //	@RequestMapping(value = "/kardex-id-producto", method = RequestMethod.POST)
-	@GetMapping("/kardex-id-producto/{kardexId}")
-	public ResponseEntity<?> kardexporIdProducto(@PathVariable("kardexId") int kardexId) {
+	@GetMapping("/kardex-id-producto/{idProducto}")
+	public ResponseEntity<?> kardexporIdProducto(@PathVariable("idProducto") int idProducto) {
 		final HttpHeaders httpHeaders = new HttpHeaders();
 		Kardex respuesta = new Kardex();
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
@@ -69,7 +73,7 @@ public class KardexController {
 		try {
 
 			/* CONSULTA EL CATALOGO DE PAISES POR LAS CONSTANTES DEFINIDAS */
-			respuesta =  repository.buscarPorIdProducto(kardexId);
+			respuesta = repository.buscarPorIdProducto(idProducto);
 //			cfgPais = GlobalValue.LISTACFGPAIS;
 			httpHeaders.add("STATUS", "1");
 			return new ResponseEntity<KardexDao>(KardexMapper.entidadToDao(respuesta), httpHeaders, HttpStatus.OK);
@@ -81,7 +85,6 @@ public class KardexController {
 		}
 
 	}
-	
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<?> save(@RequestBody KardexDao valor) {
@@ -101,6 +104,19 @@ public class KardexController {
 		}
 	}
 
-	
+	@GetMapping("/kardex/detalle-kardex/{idKardex}")
+	public ResponseEntity<?> getDetalleKardex(@PathVariable("idKardex") int idKardex) {
+		final HttpHeaders httpHeaders = new HttpHeaders();
+
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+		httpHeaders.setCacheControl("no-cache, no-store, max-age=120, must-revalidate");
+
+		Kardex kardex = repository.buscarPorIdKardex(idKardex);
+		if (kardex == null)
+			return ResponseEntity.notFound().build();
+		List<DetalleKardexDao> detalle = kardexServices.getDetalleKardex(idKardex);
+//        return ResponseEntity.ok(bikes);
+		return new ResponseEntity<List<DetalleKardexDao>>(detalle, httpHeaders, HttpStatus.OK);
+	}
 
 }

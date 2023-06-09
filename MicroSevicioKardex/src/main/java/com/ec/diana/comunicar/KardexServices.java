@@ -10,7 +10,7 @@ import com.ec.diana.dao.DetalleKardexDao;
 import com.ec.diana.dao.KardexDao;
 
 @Service
-public class ProductoServices {
+public class KardexServices {
 
 	@Autowired
     RestTemplate restTemplate;
@@ -22,9 +22,5 @@ public class ProductoServices {
 	}
 	
 	
-	public KardexDao getKardexPorIdProducto(Integer idProducto){
-		
-	  KardexDao kardex= restTemplate.getForObject("http://localhost:8586/api/kardex-id-producto/" + idProducto, KardexDao.class);
-        return kardex;
-	}
+	
 }

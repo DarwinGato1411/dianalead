@@ -87,30 +87,30 @@ public class ProductoController {
 	}
 
 	/* COMUNICACION ENTRE MICROSERVICIOS */
-	@GetMapping("/producto/kardex/{kardexId}")
-	public ResponseEntity<?> getKardex(@PathVariable("kardexId") int kardexId) {
+	@GetMapping("/producto/kardex/{idProducto}")
+	public ResponseEntity<?> getKardex(@PathVariable("idProducto") int idProducto) {
 		final HttpHeaders httpHeaders = new HttpHeaders();
 
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
 		httpHeaders.setCacheControl("no-cache, no-store, max-age=120, must-revalidate");
 
-		KardexDao kardex = productoServices.getKardex(kardexId);
+		KardexDao kardex = productoServices.getKardexPorIdProducto(idProducto);
 		if (kardex == null)
 			return ResponseEntity.notFound().build();
 		return new ResponseEntity<KardexDao>(kardex, httpHeaders, HttpStatus.OK);
 	}
 
-	@GetMapping("/producto/detalle-kardex/{kardexId}")
-	public ResponseEntity<?> getDetalleKardex(@PathVariable("kardexId") int kardexId) {
+	@GetMapping("/producto/detalle-kardex/{idProducto}")
+	public ResponseEntity<?> getDetalleKardex(@PathVariable("idProducto") int idProducto) {
 		final HttpHeaders httpHeaders = new HttpHeaders();
 
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
 		httpHeaders.setCacheControl("no-cache, no-store, max-age=120, must-revalidate");
 
-		KardexDao kardex = productoServices.getKardex(kardexId);
+		KardexDao kardex = productoServices.getKardexPorIdProducto(idProducto);
 		if (kardex == null)
 			return ResponseEntity.notFound().build();
-		List<DetalleKardexDao> detalle = productoServices.getDetalleKardex(kardexId);
+		List<DetalleKardexDao> detalle = productoServices.getDetalleKardex(kardex.getIdKardex());
 //        return ResponseEntity.ok(bikes);
 		return new ResponseEntity<List<DetalleKardexDao>>(detalle, httpHeaders, HttpStatus.OK);
 	}
