@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ec.diana</groupId>
-	<artifactId>MicroSevicioProducto-1</artifactId>
+	<artifactId>MicroSevicioKardex</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>MicroSevicioProducto-1</name>
-	<description>Producto</description>
+	<name>MicroSevicioKardex</name>
+	<description>Katdex</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
