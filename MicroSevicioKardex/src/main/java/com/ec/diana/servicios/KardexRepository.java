@@ -21,4 +21,7 @@ public interface KardexRepository extends CrudRepository<Kardex, Long> {
 
 	@Query("SELECT u FROM Kardex u WHERE  u.idProducto =:idProducto  ")
 	Kardex buscarPorIdProducto(@Param("idProducto") Integer idProducto);
+	
+	@Query("SELECT u FROM Kardex u WHERE  u.idKardex =:idKardex  ")
+	Kardex buscarPorIdKardex(@Param("idKardex") Integer idKardex);
 }

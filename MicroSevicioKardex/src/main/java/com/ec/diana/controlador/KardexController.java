@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +23,6 @@ import com.ec.diana.mapper.KardexMapper;
 import com.ec.diana.servicios.KardexRepository;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api")
@@ -31,6 +32,8 @@ public class KardexController {
 
 	@Autowired
 	private KardexRepository repository;
+	
+	
 
 	@RequestMapping(value = "/kardex", method = RequestMethod.GET)
 	public ResponseEntity<?> productos() {
@@ -55,8 +58,9 @@ public class KardexController {
 
 	}
 	
-	@RequestMapping(value = "/kardex-id-producto", method = RequestMethod.POST)
-	public ResponseEntity<?> kardexporIdProducto(@RequestBody ProductoDao valor) {
+//	@RequestMapping(value = "/kardex-id-producto", method = RequestMethod.POST)
+	@GetMapping("/kardex-id-producto/{kardexId}")
+	public ResponseEntity<?> kardexporIdProducto(@PathVariable("kardexId") int kardexId) {
 		final HttpHeaders httpHeaders = new HttpHeaders();
 		Kardex respuesta = new Kardex();
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
@@ -65,7 +69,7 @@ public class KardexController {
 		try {
 
 			/* CONSULTA EL CATALOGO DE PAISES POR LAS CONSTANTES DEFINIDAS */
-			respuesta =  repository.buscarPorIdProducto(valor.getIdProducto());
+			respuesta =  repository.buscarPorIdProducto(kardexId);
 //			cfgPais = GlobalValue.LISTACFGPAIS;
 			httpHeaders.add("STATUS", "1");
 			return new ResponseEntity<KardexDao>(KardexMapper.entidadToDao(respuesta), httpHeaders, HttpStatus.OK);
@@ -96,5 +100,7 @@ public class KardexController {
 			return new ResponseEntity<String>(e.getMessage(), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	
 
 }

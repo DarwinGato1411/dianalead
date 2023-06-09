@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +32,7 @@ public class DetalleKardexController {
 
 	@Autowired
 	private DetalleKardexRepository repository;
+	 
 
 	@RequestMapping(value = "/detallekardex", method = RequestMethod.GET)
 	public ResponseEntity<?> productos() {
@@ -54,8 +57,9 @@ public class DetalleKardexController {
 
 	}
 	
-	@RequestMapping(value = "/detallekardex-id-kardex", method = RequestMethod.POST)
-	public ResponseEntity<?> kardexporIdProducto(@RequestBody KardexDao valor) {
+	@GetMapping("/detallekardex-id-kardex/{kardexId}")
+//	@RequestMapping(value = "/detallekardex-id-kardex", method = RequestMethod.POST)
+	public ResponseEntity<?> kardexporIdProducto(@PathVariable("kardexId") int kardexId) {
 		final HttpHeaders httpHeaders = new HttpHeaders();
 		List<DetalleKardex> respuesta = new ArrayList<>();
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
@@ -64,7 +68,7 @@ public class DetalleKardexController {
 		try {
 
 			/* CONSULTA EL CATALOGO DE PAISES POR LAS CONSTANTES DEFINIDAS */
-			respuesta =  repository.buscarPorIdKardex(valor.getIdKardex());
+			respuesta =  repository.buscarPorIdKardex(kardexId);
 //			cfgPais = GlobalValue.LISTACFGPAIS;
 			httpHeaders.add("STATUS", "1");
 			return new ResponseEntity<List<DetalleKardexDao>>(DetalleKardexMapper.listaEntidadToListaDao(respuesta), httpHeaders, HttpStatus.OK);
@@ -95,5 +99,6 @@ public class DetalleKardexController {
 			return new ResponseEntity<String>(e.getMessage(), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
+	
 }
